@@ -43,18 +43,24 @@ public final class Transformers {
      * A function that applies a transformation to each element of an {@link Iterable},
      * returning a list of these transformed elements.
      * For instance, {@code [1, 2, 3, 4, 5]} could use {@code transform} to produce a list of squares by passing
-     * a function that computes the square of the input, thus obtaining {@code [1, 4, 9, 16, 25]}.
-     * <b>NOTE:</b> this function is a special flattenTransform whose function always return a list with a single
-     * element
-     *
-     * @param base the elements on which to operate
-     * @param transformer the {@link Function} to apply to each element.
-     * @return A transformed list where each input element is replaced with the produced elements
-     * @param <I> input elements type
-     * @param <O> output elements type
-     */
+    * a function that computes the square of the input, thus obtaining {@code [1, 4, 9, 16, 25]}.
+    * <b>NOTE:</b> this function is a special flattenTransform whose function always return a list with a single
+    * element
+    *
+    * @param base the elements on which to operate
+    * @param transformer the {@link Function} to apply to each element.
+    * @return A transformed list where each input element is replaced with the produced elements
+    * @param <I> input elements type
+    * @param <O> output elements type
+    */
     public static <I, O> List<O> transform(final Iterable<I> base, final Function<I, O> transformer) {
-        return null;
+        return flattenTransform(base, new Function<I, List<O>>() {
+            @Override
+            public List<O> call(final I input) {
+                return List.of(transformer.call(input));
+            }
+            
+        });
     }
 
     /**
@@ -70,7 +76,7 @@ public final class Transformers {
      * @param <I> type of the collection elements
      */
     public static <I> List<? extends I> flatten(final Iterable<? extends Collection<? extends I>> base) {
-        return null;
+        return flattenTransform(base, Function.identity());
     }
 
     /**
@@ -87,7 +93,16 @@ public final class Transformers {
      * @param <I> elements type
      */
     public static <I> List<I> select(final Iterable<I> base, final Function<I, Boolean> test) {
-        return null;
+        return flattenTransform (base, new Function <I, Collection<? extends I>>() {
+            @Override
+            public Collection<? extends I> call(final I input) {
+                if(test.call(input)) {
+                    return List.of(input);
+                } else {
+                    return List.of();
+                }
+            }   
+        });
     }
 
     /**
@@ -103,6 +118,11 @@ public final class Transformers {
      * @param <I> elements type
      */
     public static <I> List<I> reject(final Iterable<I> base, final Function<I, Boolean> test) {
-        return null;
+        return select(base, new Function<I,Boolean>() {
+            @Override
+            public Boolean call(final I input) {
+                return (test.call(input));
+            }
+        });
     }
 }
