@@ -1,6 +1,5 @@
 package it.unibo.mvc;
 
-import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +12,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 /**
  * This class is a simple application that writes a random number on a file.
