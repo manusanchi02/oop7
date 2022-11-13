@@ -7,8 +7,6 @@ import it.unibo.mvc.api.DrawNumberController;
 import it.unibo.mvc.api.DrawNumberView;
 import it.unibo.mvc.controller.DrawNumberControllerImpl;
 import it.unibo.mvc.model.DrawNumberImpl;
-import it.unibo.mvc.view.DrawNumberSwingView;
-import it.unibo.mvc.view.DrawNumberStdoutView;
 
 /**
  * Application entry-point.
@@ -41,7 +39,7 @@ public final class LaunchApp {
         for (final String viewType : List.of("Stdout", "Swing")) {
             final Class<?> cls = Class.forName("it.unibo.mvc.view.DrawNumber" + viewType + "View");
             for (int i = 0; i < 3; i++) {
-                final Object view = cls.getConstructor().newInstance(args);
+                final Object view = cls.getConstructor().newInstance();
                 app.addView((DrawNumberView) view);
             }
         }
